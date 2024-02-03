@@ -3,9 +3,7 @@ import com.microsoft.playwright.*;
 
 public class ListingFlightAppUITest {
     public static void main(String[] args) {
-        Playwright playwright = null;
-        try {
-            playwright = Playwright.create();
+        try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
             Page page = browser.newPage();
 
@@ -32,12 +30,6 @@ public class ListingFlightAppUITest {
             }
 
             browser.close();
-        }catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        } finally {
-            if (playwright != null) {
-                playwright.close();
-            }
         }
     }
 }
