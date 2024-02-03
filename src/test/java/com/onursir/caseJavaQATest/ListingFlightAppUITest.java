@@ -3,7 +3,9 @@ import com.microsoft.playwright.*;
 
 public class ListingFlightAppUITest {
     public static void main(String[] args) {
-        try (Playwright playwright = Playwright.create()) {
+        Playwright playwright = null;
+        try {
+            playwright = Playwright.create();
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
             Page page = browser.newPage();
 
@@ -11,11 +13,10 @@ public class ListingFlightAppUITest {
             page.waitForLoadState();
 
             page.click("xpath=//button[@id='headlessui-combobox-button-:R1a9lla:']");
-
             page.click("text=Istanbul");
 
-            String xpath = "//*[@id='headlessui-combobox-button-:R1ahlla:']";
-            page.click(xpath);
+
+            page.click("//*[@id='headlessui-combobox-button-:R1ahlla:']");
             page.click("text=Los Angeles");
 
             page.waitForSelector(".mb-10");
@@ -31,6 +32,12 @@ public class ListingFlightAppUITest {
             }
 
             browser.close();
+        }catch (Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        } finally {
+            if (playwright != null) {
+                playwright.close();
+            }
         }
     }
 }
